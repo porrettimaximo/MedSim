@@ -1,11 +1,11 @@
-EN POWERSHELL:
+﻿EN POWERSHELL:
 
-cd C:\Users\porre\IdeaProjects\MedSim\medsim-chat-only-sandbox
-.\.venv\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8001
+cd C:\Users\Maxi\PycharmProjects\MedSim\MedSim\medsim-chat-only-sandbox
+.\.venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8001
 
 Si 8001 esta ocupado:
 
-.\.venv\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8002
+.\.venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8002
 
 IMPORTANTE:
 
@@ -28,3 +28,10 @@ Ejemplos (sin keys):
   - language: es (o es-AR)
   - speed: 0.92
   - temperature: 0.35
+
+
+UI:
+- Index: http://127.0.0.1:8001/frontend/index
+- Estudiante: http://127.0.0.1:8001/frontend/student
+- Evaluador: http://127.0.0.1:8001/frontend/evaluator
+

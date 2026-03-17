@@ -1,10 +1,10 @@
-{
+﻿{
   "id": "carlos_35_cefalea_mareos",
   "name": "Carlos",
   "age": 35,
   "region": "AMBA",
   "administrative": {
-    "full_name": "Carlos Gómez",
+    "full_name": "Carlos G\u00f3mez",
     "date_of_birth": "1990-05-12",
     "dni": "30.123.456",
     "insurance": "OSDE 210",
@@ -25,34 +25,34 @@
     "imaging": [],
     "notes": []
   },
-  "chief_complaint": "Hola, doctor. Me siento mal desde ayer: me duele la cabeza y estoy mareado. Siento como que me voy a descomponer.",
-  "what_they_feel": "Estoy cansado, con la cabeza pesada y una sensación de mareo como si el ambiente se moviese. Me cuesta concentrarme y me pongo nervioso cuando no entiendo qué pasa.",
+  "chief_complaint": "Hola, doc. La verdad que me siento re mal desde ayer: me duele la cabeza y estoy mareado. Siento como que me voy a descomponer.",
+  "what_they_feel": "Estoy cansado, con la cabeza pesada y una sensaci\u00f3n de mareo como si el ambiente se moviese. Me cuesta concentrarme y me pongo nervioso cuando no entiendo qu\u00e9 pasa.",
   "symptoms_reported": [
     "Dolor de cabeza intenso (inicio ayer por la tarde)",
-    "Mareos / sensación de inestabilidad",
+    "Mareos / sensaci\u00f3n de inestabilidad",
     "Boca seca y algo de sed",
-    "Ansiedad por no saber qué tiene"
+    "Ansiedad por no saber qu\u00e9 tiene"
   ],
   "known_medical_history": {
-    "enfermedades_previas": "Niega enfermedades crónicas diagnosticadas.",
-    "medicacion_habitual": "No toma medicación diaria.",
+    "enfermedades_previas": "Niega enfermedades cr\u00f3nicas diagnosticadas.",
+    "medicacion_habitual": "No toma medicaci\u00f3n diaria.",
     "alergias": "Niega alergias conocidas.",
-    "antecedentes_familiares": "Madre con 'problemas de azúcar' (no sabe detalles).",
-    "habitos": "Café 2-3 por día. Alcohol social. No fuma.",
-    "ultimo_control": "No recuerda el último chequeo."
+    "antecedentes_familiares": "Madre con 'problemas de az\u00facar' (no sabe detalles).",
+    "habitos": "Caf\u00e9 2-3 por d\u00eda. Alcohol social. No fuma.",
+    "ultimo_control": "No recuerda el \u00faltimo chequeo."
   },
-  "unknown_real_problem": "Deshidratación + posible hiperglucemia no diagnosticada (ej.: diabetes reciente) que explica sed/boca seca y malestar. El paciente NO lo sabe.",
-  "doctor_display_real_problem": "Probable deshidratación + hiperglucemia (sospecha de diabetes de inicio reciente)",
+  "unknown_real_problem": "Deshidrataci\u00f3n + posible hiperglucemia no diagnosticada (ej.: diabetes reciente) que explica sed/boca seca y malestar. El paciente NO lo sabe.",
+  "doctor_display_real_problem": "Probable deshidrataci\u00f3n + hiperglucemia (sospecha de diabetes de inicio reciente)",
   "true_case": {
-    "diagnostico_principal": "Deshidratación + hiperglucemia (probable diabetes de debut)",
+    "diagnostico_principal": "Deshidrataci\u00f3n + hiperglucemia (probable diabetes de debut)",
     "diferenciales": [
-      "Migraña",
-      "Vértigo periférico (p. ej., VPPB)",
+      "Migra\u00f1a",
+      "V\u00e9rtigo perif\u00e9rico (p. ej., VPPB)",
       "Crisis hipertensiva",
-      "Infección viral / cuadro febril incipiente"
+      "Infecci\u00f3n viral / cuadro febril incipiente"
     ],
-    "indicaciones_plan": "Evaluación clínica completa y signos vitales. Hidratación (oral o EV según tolerancia) y control de síntomas. Glucemia capilar y laboratorio (glucemia, ionograma, función renal, cetonas si corresponde) para confirmar hiperglucemia y descartar complicaciones. Interrogar banderas rojas neurológicas (déficit focal, rigidez de nuca, cefalea súbita) y derivar a guardia/imagen si aparecen. Educación y seguimiento cercano (control en 24–48 h) con indicaciones de alarma.",
-    "receta": "Opcional según evaluación: analgesia simple si no hay contraindicaciones (p. ej., paracetamol) + rehidratación oral. Derivar/indicar control metabólico si se confirma hiperglucemia."
+    "indicaciones_plan": "Evaluaci\u00f3n cl\u00ednica completa y signos vitales. Hidrataci\u00f3n (oral o EV seg\u00fan tolerancia) y control de s\u00edntomas. Glucemia capilar y laboratorio (glucemia, ionograma, funci\u00f3n renal, cetonas si corresponde) para confirmar hiperglucemia y descartar complicaciones. Interrogar banderas rojas neurol\u00f3gicas (d\u00e9ficit focal, rigidez de nuca, cefalea s\u00fabita) y derivar a guardia/imagen si aparecen. Educaci\u00f3n y seguimiento cercano (control en 24-48 h) con indicaciones de alarma.",
+    "receta": "Opcional seg\u00fan evaluaci\u00f3n: analgesia simple si no hay contraindicaciones (p. ej., paracetamol) + rehidrataci\u00f3n oral. Derivar/indicar control metab\u00f3lico si se confirma hiperglucemia."
   },
   "personality": "Impaciente",
   "language_level": "B",

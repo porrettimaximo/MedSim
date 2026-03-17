@@ -41,7 +41,7 @@ Opcional:
 ## Instalacion
 
 ```powershell
-cd C:\Users\porre\IdeaProjects\MedSim\medsim-chat-only-sandbox
+cd C:\Users\Maxi\PycharmProjects\MedSim\MedSim\medsim-chat-only-sandbox
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --upgrade pip
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
@@ -51,7 +51,7 @@ python -m venv .venv
 
 ```powershell
 cd C:\Users\porre\IdeaProjects\MedSim\medsim-chat-only-sandbox
-.\.venv\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8001
+.\.venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8001
 ```
 
 Abrir:
