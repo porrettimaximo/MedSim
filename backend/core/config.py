@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     FORWARDED_ALLOW_IPS: str = "127.0.0.1"
     GRACEFUL_TIMEOUT_SECONDS: int = Field(default=30, ge=1)
     BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
+    # Autenticación de sitio. Vacío = sin login.
+    SITE_PASSWORD: Optional[str] = None
+    SECRET_KEY: str = "change-me-in-production-use-a-long-random-string"
 
     # --- MONGO DB ---
     # Usamos 127.0.0.1 para comunicación interna en el Pod

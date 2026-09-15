@@ -10,6 +10,8 @@ from backend.core.bootstrap import bootstrap_demo_data
 from backend.core.config import settings
 from backend.core.database import connect_to_mongo, close_mongo_connection, get_database
 from backend.api.router import api_router
+from backend.api import auth as auth_router
+from backend.middleware.auth_middleware import SiteAuthMiddleware
 from backend.services.container import services
 
 @asynccontextmanager
@@ -25,6 +27,12 @@ async def lifespan(app: FastAPI):
     await close_mongo_connection()
 
 app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
+
+# Middleware de autenticación por cookie (antes que cualquier ruta)
+app.add_middleware(SiteAuthMiddleware)
+
+# Rutas de autenticación (login / logout)
+app.include_router(auth_router.router, prefix="/auth", tags=["auth"])
 
 # Static files
 BASE_DIR = Path(__file__).resolve().parent.parent
