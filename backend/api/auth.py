@@ -113,7 +113,7 @@ def is_authenticated(request: Request) -> bool:
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request, next: str = "/frontend/index", error: str = ""):
     err_html = f'<div class="error">Contraseña incorrecta.</div>' if error else ""
-    return HTMLResponse(_LOGIN_PAGE.format(next=next, error=err_html))
+    return HTMLResponse(_LOGIN_PAGE.substitute(next=next, error=err_html))
 
 
 @router.post("/login")
