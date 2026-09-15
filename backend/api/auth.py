@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import time
+from string import Template
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 
@@ -8,7 +9,7 @@ from backend.core.config import settings
 
 router = APIRouter()
 
-_LOGIN_PAGE = """<!DOCTYPE html>
+_LOGIN_PAGE = Template("""<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -63,16 +64,16 @@ _LOGIN_PAGE = """<!DOCTYPE html>
     <h1>MedSim</h1>
     <p>Simulador de entrevista médico-paciente</p>
     <form method="post" action="/auth/login">
-      <input type="hidden" name="next" value="{next}">
+      <input type="hidden" name="next" value="$next">
       <label for="password">CONTRASEÑA</label>
       <input id="password" name="password" type="password"
              placeholder="Ingresá la contraseña" autofocus required>
-      {error}
+      $error
       <button type="submit">Ingresar</button>
     </form>
   </div>
 </body>
-</html>"""
+</html>""")
 
 
 def _make_token(password: str) -> str:
