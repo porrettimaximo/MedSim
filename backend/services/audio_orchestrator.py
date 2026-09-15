@@ -1,14 +1,13 @@
 import base64
 import logging
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
 from fastapi import HTTPException, UploadFile
 
-from backend.domain.models import Encounter, Message, PatientProfile
+from backend.domain.models import Message
 from backend.services.ai_interfaces import ILLMService, ISTTService, ITTSService
 from backend.services.interfaces import IPatientService
 from backend.services.encounter_service import EncounterService
 from backend.services.hub import EncounterRealtimeHub
-from backend.services.audio_input_mode import AudioInputMode, resolve_audio_input_mode
 
 logger = logging.getLogger(__name__)
 
@@ -102,21 +101,30 @@ class AudioOrchestrator:
             user_audio_url=user_audio_url,
         )
 
-    async def process_audio_input_by_mode(
+    async def process_audio_file(
         self,
         encounter_id: str,
         audio_file: UploadFile,
-        mode: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
-        OCP: Resolución de estrategia según el modo.
+        Procesa un UploadFile de audio: STT → guarda audio del usuario → LLM → TTS → respuesta.
+        Usado por el endpoint web /api/audio_turn.
         """
-        resolved_mode = resolve_audio_input_mode(mode)
-        
-        if resolved_mode == AudioInputMode.UNREAL:
-            return await self.__process_unreal_audio(encounter_id, audio_file)
-        
-        return await self.__process_standard_audio(encounter_id, audio_file)
+        audio_bytes = await audio_file.read()
+        stt_result = await self.__stt_service.transcribe_audio(
+            audio_bytes,
+            content_type=audio_file.content_type or "audio/wav"
+        )
+        user_text = stt_result.get("text", "")
+
+        audio_asset = await self.__audio_service.save_audio(encounter_id, audio_bytes, audio_file.content_type)
+
+        return await self.process_text_input(
+            encounter_id,
+            user_text,
+            include_tts=True,
+            user_audio_url=f"/api/audio/{audio_asset.id}"
+        )
 
     async def __handle_tts(self, encounter_id: str, text: str) -> Dict[str, Any]:
         """Encapsulación de lógica TTS."""
@@ -131,31 +139,6 @@ class AudioOrchestrator:
             "audio_base64": base64.b64encode(audio_bytes).decode("ascii"),
             "content_type": "audio/wav"
         }
-
-    async def __process_standard_audio(self, encounter_id: str, audio_file: UploadFile) -> Dict[str, Any]:
-        # Implementación simplificada delegando a STT
-        audio_bytes = await audio_file.read()
-        stt_result = await self.__stt_service.transcribe_audio(
-            audio_bytes, 
-            content_type=audio_file.content_type or "audio/wav"
-        )
-        user_text = stt_result.get("text", "")
-        
-        # Guardar audio del usuario
-        audio_asset = await self.__audio_service.save_audio(encounter_id, audio_bytes, audio_file.content_type)
-        
-        return await self.process_text_input(
-            encounter_id, 
-            user_text, 
-            include_tts=True, 
-            user_audio_url=f"/api/audio/{audio_asset.id}"
-        )
-
-    async def __process_unreal_audio(self, encounter_id: str, audio_file: UploadFile) -> Dict[str, Any]:
-        # Solo guardar sin procesar flujo de chat (Requerimiento Unreal)
-        audio_bytes = await audio_file.read()
-        await self.__audio_service.save_audio(encounter_id, audio_bytes, audio_file.content_type)
-        return {"ok": True, "mode": "unreal"}
 
     def __build_response_payload(self, eid: str, text: str, reply: str, msg: Message, audio: Dict) -> Dict[str, Any]:
         """Centralización de la construcción del payload de respuesta."""
