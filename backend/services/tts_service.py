@@ -116,11 +116,17 @@ class TTSService:
             if self.api_key and self.api_key.lower() not in ("local", "none", "no-key"):
                 headers["Authorization"] = f"Bearer {self.api_key}"
 
+            raw_speed = float(self.speed or 1.0)
+            safe_speed = max(0.4, min(2.5, raw_speed))
+
+            raw_temp = float(self.temperature or 0.5)
+            safe_temp = max(0.0, min(2.0, raw_temp))
+
             payload = {
                 "id": resolved_id,
                 "text": text,
-                "speed": float(self.speed or 1.0),
-                "style_strength": float(self.temperature or 0.5),
+                "speed": safe_speed,
+                "style_strength": safe_temp,
                 "emotion": emotion,
             }
 
