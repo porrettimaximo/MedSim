@@ -1,6 +1,6 @@
-from typing import List, Optional
+from typing import List, Optional, Any, Union, Dict
 from fastapi import APIRouter, HTTPException, Body
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from backend.domain.models import PatientProfile
 from backend.services.container import services
 
@@ -8,11 +8,15 @@ router = APIRouter()
 
 
 class PatientFormPayload(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     id: str
     first_name: str
     last_name: str = ""
     age: int
     region: str = "AMBA"
+    avatar: str = "female"
+    voice: str = "0"
     date_of_birth: Optional[str] = None
     dni: Optional[str] = None
     insurance: Optional[str] = None
@@ -21,6 +25,9 @@ class PatientFormPayload(BaseModel):
     triage_short: Optional[str] = None
     chief_complaint: Optional[str] = None
     what_they_feel: Optional[str] = None
+    spontaneous_info: Optional[str] = None
+    conditional_info: Optional[str] = None
+    symptoms: Optional[List[Any]] = None
     symptoms_text: str = ""
     known_history_text: str = ""
     diagnoses_text: str = ""
@@ -42,6 +49,7 @@ class PatientFormPayload(BaseModel):
     medical_history_recall: str = "Low"
     cognitive_confusion: str = "Normal"
     speaking_style: str = "rioplatense"
+
 
 @router.get("/", response_model=List[PatientProfile])
 async def list_patients():

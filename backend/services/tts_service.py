@@ -67,24 +67,31 @@ class TTSService:
         4: Sofía    (Femenina joven)
         5: Lucas    (Masculino joven)
         """
-        raw = str(voice_id or self.voice_id or "").strip().lower()
+        # 1. Si el paciente tiene una voz explícita asignada
+        if voice_id is not None and str(voice_id).strip() != "":
+            raw = str(voice_id).strip().lower()
+            if raw in ("0", "1"):
+                return int(raw)
+            if any(token in raw for token in ("female", "femenin", "mujer", "daniela")):
+                return 0
+            if any(token in raw for token in ("male", "masculin", "hombre", "martin")):
+                return 1
 
-        # Si ya es un ID numérico válido (0 o 1)
-        if raw in ("0", "1"):
-            return int(raw)
+        # 2. Si no tiene voz explícita, usar el género/avatar del paciente
+        if gender:
+            g = str(gender).strip().lower()
+            if any(token in g for token in ("female", "femenin", "mujer")):
+                return 0
+            if any(token in g for token in ("male", "masculin", "hombre")):
+                return 1
 
-        # Mapeo por tokens o alias
-        if any(token in raw for token in ("male", "masculin", "hombre", "martin")):
-            return 1
-        if any(token in raw for token in ("female", "femenin", "mujer", "daniela")):
-            return 0
+        # 3. Fallback por configuración global o predeterminado
+        fallback_raw = str(self.voice_id or "0").strip().lower()
+        if fallback_raw in ("0", "1"):
+            return int(fallback_raw)
 
-        # Fallback por género declarado si está disponible
-        if gender and any(g in str(gender).lower() for g in ("male", "masculin", "hombre")):
-            return 1
-
-        # Fallback predeterminado a Femenina (0)
         return 0
+
 
 
     async def text_to_speech(

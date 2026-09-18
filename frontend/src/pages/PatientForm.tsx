@@ -243,7 +243,8 @@ export default function PatientForm() {
       setPAge(p.age?.toString() || '')
 
       if (p.avatar) setSelectedAvatar(p.avatar === 'female' || p.avatar?.includes('female') ? 'female' : 'male')
-      if (p.voice) setSelectedVoice(p.voice)
+      if (p.voice !== undefined && p.voice !== null && p.voice !== '') setSelectedVoice(String(p.voice))
+
 
       setPDob(p.administrative?.date_of_birth || '')
       setPDni(p.administrative?.dni || '')
