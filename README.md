@@ -144,9 +144,21 @@ Todas las variables se configuran en `.env`. El archivo `.env.example` contiene 
 | `PATIENT_LLM_URL` | URL base del proveedor LLM (compatible con API OpenAI) |
 | `PATIENT_LLM_API_KEY` | API key del proveedor LLM |
 | `PATIENT_LLM_MODEL` | Nombre del modelo a usar |
-| `STT_API_URL` / `STT_API_KEY` / `STT_MODEL` | Proveedor de transcripción de voz |
-| `TTS_API_URL` / `TTS_API_KEY` / `TTS_VOICE_ID` / `TTS_MODEL_ID` | Proveedor de síntesis de voz |
-| `TTS_LANGUAGE` / `TTS_SPEED` / `TTS_TEMPERATURE` | Parámetros de voz |
+| `STT_API_URL` / `STT_API_KEY` / `STT_MODEL` | Proveedor de transcripción de voz (Groq / OpenAI Whisper) |
+| `TTS_API_URL` | URL del servicio TTS. Para **TTS-ar en Docker**: `http://tts:8000` (misma red) o `http://host.docker.internal:8001` |
+| `TTS_API_KEY` | API key (dejar vacía o `local` para TTS-ar interno) |
+| `TTS_VOICE_ID` | Identificador de voz (`0` a `5` para arquetipos clínicos de TTS-ar o nombre/UUID) |
+| `TTS_SPEED` / `TTS_TEMPERATURE` | Velocidad de habla (`1.0`) y expresividad/estilo (`0.5`) |
+
+#### Catálogo de Voces Clínicas (TTS-ar / Piper VITS Argentino)
+Cuando se utiliza el microservicio `TTS-ar`, MedSim resuelve inteligentemente los arquetipos de pacientes según género y edad o ID directo:
+- `0`: **Daniela** — Femenina adulta (tono medio)
+- `1`: **Martín** — Masculino adulto (tono medio-grave)
+- `2`: **Marta** — Femenina anciana / adulta mayor
+- `3`: **Roberto** — Masculino anciano / adulto mayor
+- `4`: **Sofía** — Femenina joven (tono ágil)
+- `5`: **Lucas** — Masculino joven (tono juvenil)
+
 
 ### Docker Compose
 

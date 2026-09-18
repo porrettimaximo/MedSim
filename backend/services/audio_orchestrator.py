@@ -63,7 +63,7 @@ class AudioOrchestrator:
 
         assistant_text = await self.__llm_service.chat_with_model(llm_messages)
 
-        audio_data = await self.__handle_tts(encounter_id, assistant_text) if include_tts else {}
+        audio_data = await self.__handle_tts(encounter_id, assistant_text, patient=patient) if include_tts else {}
 
         assistant_msg = encounter.add_message("assistant", assistant_text, audio_url=audio_data.get("audio_url"))
         await self.__encounter_service.repository.upsert(encounter, id_field="encounter_id")
@@ -126,9 +126,18 @@ class AudioOrchestrator:
             user_audio_url=f"/api/audio/{audio_asset.id}"
         )
 
-    async def __handle_tts(self, encounter_id: str, text: str) -> Dict[str, Any]:
-        """Encapsulación de lógica TTS."""
-        audio_bytes = await self.__tts_service.text_to_speech(text)
+    async def __handle_tts(self, encounter_id: str, text: str, patient: Optional[Any] = None) -> Dict[str, Any]:
+        """Encapsulación de lógica TTS con perfil de voz del paciente."""
+        voice = getattr(patient, "voice", None)
+        gender = getattr(patient, "avatar", None)
+        age = getattr(patient, "age", None)
+
+        audio_bytes = await self.__tts_service.text_to_speech(
+            text=text,
+            voice_id=voice,
+            gender=gender,
+            age=age,
+        )
         audio_asset = await self.__audio_service.save_audio(
             encounter_id=encounter_id,
             audio_bytes=audio_bytes,

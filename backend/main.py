@@ -45,28 +45,42 @@ img_dir = BASE_DIR / "frontend" / "dist" / "IMG"
 if img_dir.exists():
     app.mount("/IMG", StaticFiles(directory=str(img_dir)), name="react_images")
 
+audio_dir = BASE_DIR / "frontend" / "dist" / "audio"
+if not audio_dir.exists():
+    audio_dir = BASE_DIR / "frontend" / "public" / "audio"
+if audio_dir.exists():
+    app.mount("/audio", StaticFiles(directory=str(audio_dir)), name="react_audio")
+
 # API
 app.include_router(api_router, prefix="/api")
 
 # --- Frontend Routes (React SPA Catch-all) ---
-@app.get("/")
-async def root():
-    return RedirectResponse(url="/frontend/index")
-
-@app.get("/frontend/{catchall:path}")
-async def serve_react_app(catchall: str):
-    return FileResponse(BASE_DIR / "frontend" / "dist" / "index.html")
-
-@app.get("/frontend")
-async def serve_react_app_root():
-    return FileResponse(BASE_DIR / "frontend" / "dist" / "index.html")
-
 @app.get("/favicon.svg")
 async def serve_favicon():
     favicon_path = BASE_DIR / "frontend" / "dist" / "favicon.svg"
     if favicon_path.exists():
         return FileResponse(favicon_path)
     return FileResponse(BASE_DIR / "frontend" / "public" / "favicon.svg")
+
+@app.get("/")
+async def root():
+    return FileResponse(BASE_DIR / "frontend" / "dist" / "index.html")
+
+# Compatibilidad retrocompatible para URLs antiguas con /frontend
+@app.get("/frontend/{catchall:path}")
+async def serve_react_app_legacy(catchall: str):
+    return RedirectResponse(url=f"/{catchall}", status_code=301)
+
+@app.get("/frontend")
+async def serve_react_app_legacy_root():
+    return RedirectResponse(url="/", status_code=301)
+
+@app.get("/{catchall:path}")
+async def serve_react_app(catchall: str):
+    index_file = BASE_DIR / "frontend" / "dist" / "index.html"
+    if index_file.exists():
+        return FileResponse(index_file)
+    raise HTTPException(status_code=404, detail="Frontend no compilado. Ejecutá npm run build.")
 
 # --- WebSocket ---
 @app.websocket("/ws/encounters/{encounter_id}")

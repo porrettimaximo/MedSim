@@ -6,7 +6,13 @@ from backend.api.auth import is_authenticated
 
 # Rutas que nunca requieren autenticación
 _PUBLIC_PREFIXES = (
-    "/auth/",           # login / logout
+    "/auth/",                   # login / logout / status
+    "/login",                   # página de login en React
+    "/frontend/login",          # compatibilidad histórica
+    "/assets/",                 # bundles compilados de React (JS/CSS)
+    "/IMG/",                    # imágenes estáticas (fondo MedSim, etc.)
+    "/audio/",                  # audios estáticos (muestras de voz TTS)
+    "/favicon",                 # favicons
     "/api/audio/audio_unreal",  # integración Unreal Engine (LAN interna)
     "/api/config_state",        # healthcheck de Docker
 )
@@ -16,7 +22,7 @@ class SiteAuthMiddleware(BaseHTTPMiddleware):
     """
     Middleware de autenticación por cookie de sesión.
     Si SITE_PASSWORD está vacío, no hace nada (modo desarrollo).
-    Redirige a /auth/login conservando la URL de destino en ?next=.
+    Redirige a /login conservando la URL de destino en ?next=.
     """
 
     async def dispatch(self, request: Request, call_next):
@@ -35,6 +41,10 @@ class SiteAuthMiddleware(BaseHTTPMiddleware):
 
         # Resto: requiere sesión válida
         if not is_authenticated(request):
-            return RedirectResponse(url=f"/auth/login?next={path}", status_code=303)
+            if path.startswith("/api/"):
+                from starlette.responses import JSONResponse
+                return JSONResponse(status_code=401, content={"detail": "No autenticado"})
+
+            return RedirectResponse(url=f"/login?next={path}", status_code=303)
 
         return await call_next(request)

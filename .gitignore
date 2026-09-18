@@ -57,3 +57,5 @@ logs/*.txt
 /curl_response.json
 /scratch_test_*.py
 /backend/unreal_audio_uploads/
+frontend/dist/
+frontend/node_modules/

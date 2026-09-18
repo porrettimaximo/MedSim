@@ -51,6 +51,7 @@ from backend.services.factories import PatientFactory
 from backend.core.exceptions import EntityNotFoundError, PatientServiceError
 
 @router.get("/{patient_id}", response_model=PatientProfile)
+@router.get("/{patient_id}/", response_model=PatientProfile, include_in_schema=False)
 async def get_patient(patient_id: str):
     try:
         return await services.patient_service.get_patient_by_id(patient_id)
@@ -59,10 +60,16 @@ async def get_patient(patient_id: str):
     except PatientServiceError as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+from typing import List, Optional, Union
+
 @router.post("/", response_model=str)
-async def create_patient(payload: dict = Body(...)):
+async def create_patient(payload: Union[PatientProfile, PatientFormPayload, dict] = Body(...)):
     try:
-        if "administrative" in payload or "triage" in payload or "institutional_history" in payload:
+        if isinstance(payload, PatientProfile):
+            patient = payload
+        elif isinstance(payload, PatientFormPayload):
+            patient = PatientFactory.build_from_form(payload.model_dump())
+        elif "administrative" in payload or "triage" in payload or "institutional_history" in payload:
             patient = PatientProfile(**payload)
         else:
             patient = PatientFactory.build_from_form(payload)

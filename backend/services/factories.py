@@ -68,7 +68,7 @@ class PatientFactory:
             age=age,
             region=str(payload.get("region") or "AMBA").strip() or "AMBA",
             avatar=avatar,
-            voice=str(payload.get("voice") or "es-AR-male-1").strip() or "es-AR-male-1",
+            voice=str(payload.get("voice") or "1").strip() or "1",
             administrative=PatientProfile.AdministrativeInfo(
                 full_name=full_name or first_name or None,
                 date_of_birth=str(payload.get("date_of_birth") or "").strip() or None,

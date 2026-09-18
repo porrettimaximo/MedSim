@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     # Autenticación de sitio. Vacío = sin login.
     SITE_PASSWORD: Optional[str] = None
     SECRET_KEY: str = "change-me-in-production-use-a-long-random-string"
+    SECURE_COOKIES: Optional[bool] = None
 
     # --- MONGO DB ---
     # Usamos 127.0.0.1 para comunicación interna en el Pod
